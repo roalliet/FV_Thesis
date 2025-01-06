@@ -145,16 +145,13 @@ def plot_ani_comp(params, exact_grid_size, num_steps, save=False):
     def animate(i):
         # Initialize numerical and exact solutions
         f, x = init(params)  # Evolve the numerical solution
+        params.t += params.dt
         params.duration = -params.t
         f_ex, x_ex = exact(params, grid_size=exact_grid_size)
-        params.t += params.dt
         
-
-
         for _ in range(i):
             f = time_evo(f, params)  # Evolve the numerical solution
         
-
         # Update both the exact and numerical solutions in the plot
         line_exact.set_data(x_ex, f_ex)  # Exact solution
         line_numerical.set_data(x, f)    # Numerical solution

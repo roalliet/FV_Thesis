@@ -1,3 +1,5 @@
+import time
+
 from time_evolution import *
 from initial_distr import init, exact
 from visualisation import *
@@ -30,10 +32,22 @@ def run_comp(params, exact_grid_size, save):
 
 
 def ani_comp(params, exact_grid_size, save):
+    # Save timestamp
+    start_time = time.time()
+
     # As dt is constant for most of the simulation we can use a for loop with num_steps, avoiding a while loop
     num_steps = int(params.duration // params.dt)
     
     plot_ani_comp(params, exact_grid_size, num_steps, save)
+
+    # Save timestamp
+    end_time = time.time()
+    # Calculate duration
+    duration_seconds = end_time - start_time
+    minutes = int(duration_seconds // 60)
+    seconds = duration_seconds % 60
+
+    print(f"Function executed in: {minutes} minutes and {seconds:.2f} seconds")
     
 
 def run_multip_interp(params, exact_grid_size, save):
@@ -125,6 +139,9 @@ def run_interp(params, exact_grid_size, save):
 
 
 def run_norm_err(params, reps, save):
+    # Save timestamp
+    start_time = time.time()
+
     # Initialize lists to store the relative error per norm
     L1 = np.empty(reps)
     L2 = np.empty(reps)
@@ -158,9 +175,18 @@ def run_norm_err(params, reps, save):
         L_inf[rep] = calc_rel_L_inf(f, f_ex)
 
         # Print the grid_size that just finnished calculating
-        print(f'Iteration with gridsize {params.grid_size} is done computing.')
+        print(f'Iteration {rep+1}/{reps+1} with gridsize {params.grid_size} is done computing.')
 
         # Double the gridsize for the next iteration and change the nesecary variables in params
         params.new_grid(params.grid_size * 2)
 
     plot_norm_err(L1, L2, L_inf, res, params, save)
+
+    # Save timestamp
+    end_time = time.time()
+    # Calculate duration
+    duration_seconds = end_time - start_time
+    minutes = int(duration_seconds // 60)
+    seconds = duration_seconds % 60
+
+    print(f"Function executed in: {minutes} minutes and {seconds:.2f} seconds")
