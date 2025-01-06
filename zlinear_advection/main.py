@@ -9,21 +9,24 @@ exact_grid_size = 1000
 C_max = 0.3
 xmax, xmin = 1, -1
 v = 1
-reps = 6
+reps = 7
 
 """
 At this point in the development of the code the options are
 func: [Block: 0, Sine: 1]
-stencil: UP2, UP3, UP4, UP5, CD2, CD4, P3_3-0, P3_2-1, P3_1-2, WENO1
-evotype: RK1, RK2, RK5
+stencil: UP2, UP3, UP4, UP5, CD2, CD4, P3_3-0, P3_2-1, P3_1-2, WENO1, WENO2
+evotype: RK1, RK2, RK4, RK5
 
 Here for example the notation P3_2-1 imples a three point stencil where two point are to the left of the face averaged value 
 and one to the right. We always assume the closest points.
 If not specified, the stencil can be asumed to be upwind biased.
+WENO1 and WENO2 differ only in their smoothness indicator but WENO1 should be fourth order while WENO2 is fifth order according to literature:
+WENO1: https://www.sciencedirect.com/science/article/pii/S0021999184711879
+WENO2: https://www.sciencedirect.com/science/article/pii/S0021999196901308
 """
-func = FunctionType(0)
-stencil = 'UP2'
-evotype = 'RK2'
+func = FunctionType(1)
+stencil = 'WENO2'
+evotype = 'RK5'
 mult_stencil = ['P3_3-0', 'P3_2-1', 'P3_1-2']
 
 params = Parameters(grid_size, xmin, xmax, duration, v, C_max, evotype, stencil, func, mult_stencil)

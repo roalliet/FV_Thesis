@@ -14,6 +14,7 @@ def calc_flux(f, stencil: str):
         'P3_2-1': UP3,
         'P3_1-2': DOWN3,
         'WENO1': WENO1,
+        'WENO2': WENO2,
 
     }
     
@@ -64,6 +65,33 @@ def P3_3(f):
     return F
 
 
+def WENO2(f):
+    # Precompute shifted arrays for smoothness indicators
+    f_m2 = np.roll(f, 3)
+    f_m1 = np.roll(f, 2)
+    f_0 = np.roll(f, 1)
+    f_p2 = np.roll(f, -1)
+
+    # Calculate the smoothness indicators for the three stencils
+    b1 = (13 / 12) * np.square(f_m2 - 2 * f_m1 + f_0) + np.square(f_m2 - 4 * f_m1 + 3 * f_0) / 4
+    b2 = (13 / 12) * np.square(f_m1 - 2 * f_0 + f) + np.square(f_m1 - f) / 4
+    b3 = (13 / 12) * np.square(f_0 - 2 * f + f_p2) + np.square(3 * f_0 - 4 * f + f_p2) / 4
+
+    # Calculate the non-linear weights
+    eps = 1e-6 # Makes sure denominator is never zero
+    weights = np.array([[1/10], [3/5], [3/10]])
+    smoothness = np.array([b1, b2, b3])
+    alpha = weights / np.square(eps + smoothness)
+    omega = alpha / np.sum(alpha, axis=0)
+
+    F1 = calc_flux(f, 'P3_3-0')
+    F2 = calc_flux(f, 'P3_2-1')
+    F3 = calc_flux(f, 'P3_1-2')
+
+    F = omega[0] * F1 + omega[1] * F2 + omega[2] * F3
+    return F
+
+
 def WENO1(f):
     # Precompute shifted arrays for smoothness indicators
     f_m2 = np.roll(f, 3)
@@ -78,7 +106,7 @@ def WENO1(f):
 
     # Calculate the non-linear weights
     eps = 1e-6 # Makes sure denominator is never zero
-    weights = np.array([1/10, 3/5, 3/10])
+    weights = np.array([[1/10], [3/5], [3/10]])
     smoothness = np.array([b1, b2, b3])
     alpha = weights / np.square(eps + smoothness)
     omega = alpha / np.sum(alpha, axis=0)
