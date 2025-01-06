@@ -22,7 +22,7 @@ STENCIL_TEMPORAL-DISCRETIZATION_(DURATION-OR-TIME)_COURANT-NUMBER_(GRIDSIZE-OR-N
 """
 
 # Determine some initial parameters of our system
-duration = 10
+duration = 1
 grid_size = 64
 exact_grid_size = 1000
 C_max = 0.3
@@ -32,7 +32,7 @@ reps = 6
 
 func = FunctionType(1)
 stencil = 'WENO1'
-evotype = 'RK5'
+evotype = 'RK4'
 mult_stencil = ['P3_3-0', 'P3_2-1', 'P3_1-2']
 
 params = Parameters(grid_size, xmin, xmax, duration, v, C_max, evotype, stencil, func, mult_stencil)

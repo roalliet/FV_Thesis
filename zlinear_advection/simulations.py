@@ -175,7 +175,7 @@ def run_norm_err(params, reps, save):
         L_inf[rep] = calc_rel_L_inf(f, f_ex)
 
         # Print the grid_size that just finnished calculating
-        print(f'Iteration {rep+1}/{reps+1} with gridsize {params.grid_size} is done computing.')
+        print(f'Iteration {rep+1}/{reps} with gridsize {params.grid_size} is done computing.')
 
         # Double the gridsize for the next iteration and change the nesecary variables in params
         params.new_grid(params.grid_size * 2)
