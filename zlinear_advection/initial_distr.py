@@ -34,7 +34,7 @@ def exact(p, grid_size=0):
     # Determine cell averages based on analytical function at time t
     if p.func.value == 0:
         # Block function
-        f = np.array([1 if ((x[i] + p.v * p.duration + 1) % 2 - 1 < 0.2) & ((x[i] + p.v * p.duration + 1) % 2 - 1 > -0.6) else 0 for i in range(grid_size)])
+        f = np.array([1 if ((x[i] - p.v * p.duration + 1) % 2 - 1 < 0.2) & ((x[i] - p.v * p.duration + 1) % 2 - 1 > -0.6) else 0 for i in range(grid_size)])
     elif p.func.value == 1:
         # Sine wave
         f = np.sin((x- p.duration * p.v) * 2 * np.pi)

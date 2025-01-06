@@ -7,32 +7,32 @@ from simulations import *
 """
 At this point in the development of the code the options are
 func: [Block: 0, Sine: 1]
-stencil: UP2, UP3, UP4, UP5, CD2, CD4, P3_3-0, P3_2-1, P3_1-2, WENO1, WENO2
+stencil: UP2, UP3, UP4, UP5, CD2, CD4, P3_3-0, P3_2-1, P3_1-2, WENO_P5_4, WENO_P5_5
 evotype: RK1, RK2, RK4, RK5
 
 Here for example the notation P3_2-1 implies a three point stencil where two point are to the left of the face averaged value 
 and one to the right. We always assume the closest points.
 If not specified, the stencil can be asumed to be upwind biased.
-WENO1 and WENO2 differ only in their smoothness indicator but WENO1 is fourth order while WENO2 is fifth order according to literature:
-WENO1: https://www.sciencedirect.com/science/article/pii/S0021999184711879
-WENO2: https://www.sciencedirect.com/science/article/pii/S0021999196901308
+WENO_P5_4 and WENO_P5_5 differ only in their smoothness indicator. P5 refers to the stencil size while 4 and 5 respectively refer to the order of accuracy
+WENO_P5_4: https://www.sciencedirect.com/science/article/pii/S0021999184711879
+WENO_P5_5: https://www.sciencedirect.com/science/article/pii/S0021999196901308
 
 The file naming convention generally follows the following structure:
-STENCIL_TEMPORAL-DISCRETIZATION_(DURATION-OR-TIME)_COURANT-NUMBER_(GRIDSIZE-OR-NORM-OR-ANIMATED).FILETYPE
+STENCIL_TEMPORAL-DISCRETIZATION_FUNC_(DURATION-OR-TIME)_COURANT-NUMBER_(GRIDSIZE-OR-NORM-OR-ANIMATED).FILETYPE
 """
 
 # Determine some initial parameters of our system
-duration = 1
-grid_size = 64
+duration = 10
+grid_size = 128
 exact_grid_size = 1000
 C_max = 0.3
 xmax, xmin = 1, -1
 v = 1
 reps = 6
 
-func = FunctionType(1)
-stencil = 'WENO1'
-evotype = 'RK4'
+func = FunctionType(0)
+stencil = 'WENO_P5_4'
+evotype = 'RK2'
 mult_stencil = ['P3_3-0', 'P3_2-1', 'P3_1-2']
 
 params = Parameters(grid_size, xmin, xmax, duration, v, C_max, evotype, stencil, func, mult_stencil)
@@ -51,5 +51,5 @@ At this point in the development of the code the following simulations are possi
 
 - run_multip_interp(params, exact_grid_size, save=False) : shows the interpolations of multiple numerical schemes at once to compare
 """
-run_norm_err(params, reps, save=False)
+ani_comp(params, exact_grid_size, save=True)
 

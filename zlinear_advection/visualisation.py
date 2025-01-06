@@ -146,7 +146,7 @@ def plot_ani_comp(params, exact_grid_size, num_steps, save=False):
         # Initialize numerical and exact solutions
         f, x = init(params)  # Evolve the numerical solution
         params.t += params.dt
-        params.duration = -params.t
+        params.duration = params.t
         f_ex, x_ex = exact(params, grid_size=exact_grid_size)
         
         for _ in range(i):

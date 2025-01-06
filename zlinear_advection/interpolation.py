@@ -13,8 +13,8 @@ def calc_flux(f, stencil: str):
         'P3_3-0': P3_3,
         'P3_2-1': UP3,
         'P3_1-2': DOWN3,
-        'WENO1': WENO1,
-        'WENO2': WENO2,
+        'WENO_P5_4': WENO_P5_4,
+        'WENO_P5_5': WENO_P5_5,
 
     }
     
@@ -65,7 +65,7 @@ def P3_3(f):
     return F
 
 
-def WENO2(f):
+def WENO_P5_5(f):
     # Precompute shifted arrays for smoothness indicators
     f_m2 = np.roll(f, 3)
     f_m1 = np.roll(f, 2)
@@ -92,7 +92,7 @@ def WENO2(f):
     return F
 
 
-def WENO1(f):
+def WENO_P5_4(f):
     # Precompute shifted arrays for smoothness indicators
     f_m2 = np.roll(f, 3)
     f_m1 = np.roll(f, 2)
