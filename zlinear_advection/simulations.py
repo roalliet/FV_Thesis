@@ -74,14 +74,14 @@ def run_multip_interp(params, exact_grid_size, save):
     # Plot the face averaged values
     plot_multip_interp(f_init, x_init, f_list, x, params, 0, save)
 
-    # As dt is constant for most of the simulation we can use a for loop with num_steps, avoiding a while loop
-    num_steps = int(params.duration // params.dt)
-    final_step = params.duration % params.dt
-
     for i in range(params.mult_len):
         # Set stencil to the correct interpolation annd resets t and dt
         params.new_stencil(params.mult_stencil[i])
         f, _ = init(params)
+
+        # As dt is constant for most of the simulation we can use a for loop with num_steps, avoiding a while loop
+        num_steps = int(params.duration // params.dt)
+        final_step = params.duration % params.dt
 
         # Evolve the distribution in time while updating the time
         for _ in range(num_steps):
@@ -180,8 +180,6 @@ def run_norm_err(params, reps, save):
         # Double the gridsize for the next iteration and change the nesecary variables in params
         params.new_grid(params.grid_size * 2)
 
-    plot_norm_err(L1, L2, L_inf, res, params, save)
-
     # Save timestamp
     end_time = time.time()
     # Calculate duration
@@ -189,4 +187,8 @@ def run_norm_err(params, reps, save):
     minutes = int(duration_seconds // 60)
     seconds = duration_seconds % 60
 
+    plot_norm_err(L1, L2, L_inf, res, params, save)
+
     print(f"Function executed in: {minutes} minutes and {seconds:.2f} seconds")
+
+    

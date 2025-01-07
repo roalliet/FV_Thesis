@@ -22,8 +22,8 @@ STENCIL_TEMPORAL-DISCRETIZATION_FUNC_(DURATION-OR-TIME)_COURANT-NUMBER_(GRIDSIZE
 """
 
 # Determine some initial parameters of our system
-duration = 10
-grid_size = 128
+duration = 2
+grid_size = 50
 exact_grid_size = 1000
 C_max = 0.3
 xmax, xmin = 1, -1
@@ -31,9 +31,9 @@ v = 1
 reps = 6
 
 func = FunctionType(0)
-stencil = 'WENO_P5_4'
+stencil = 'P3_1-2'
 evotype = 'RK2'
-mult_stencil = ['P3_3-0', 'P3_2-1', 'P3_1-2']
+mult_stencil = ['P3_2-1', 'P3_1-2', 'P3_3-0']
 
 params = Parameters(grid_size, xmin, xmax, duration, v, C_max, evotype, stencil, func, mult_stencil)
 print('You are using the ' + colored(f'{func.name}', "magenta") + ' function!! Consider the regularity of this function when plotting the error!')
@@ -51,5 +51,5 @@ At this point in the development of the code the following simulations are possi
 
 - run_multip_interp(params, exact_grid_size, save=False) : shows the interpolations of multiple numerical schemes at once to compare
 """
-ani_comp(params, exact_grid_size, save=True)
+run_interp(params, exact_grid_size, save=False)
 
